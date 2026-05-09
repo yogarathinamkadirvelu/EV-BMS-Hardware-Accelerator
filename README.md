@@ -2,7 +2,7 @@
 
 **Target Hardware:** Xilinx Zynq-7000 System-on-Chip (SoC)  
 **Development Tools:** AMD Xilinx Vivado & Vitis Unified IDE  
-**Team Members:** [YOGARATHINAM K], [PRADEEP KUMAR S], [HEMAVARSHINI M], [PRATHANYAA S]
+**Team Members:** [YOGARATHINAM K], [PRADEEPKUMAR S], [HEMAVARSHINI M], [PRATHANYAA S]
 
 ## 🚗 Project Overview
 In modern Electric Vehicles, traction inverters switch at incredibly high frequencies, creating massive Electromagnetic Interference (EMI). This noise corrupts the low-voltage analog sensors of the Battery Management System (BMS), potentially causing false safety shutdowns.
@@ -18,10 +18,10 @@ Traditional microcontrollers filter this noise using software (DSP), which consu
 We are documenting the complete build process of this system on LinkedIn! 
 
 * **Week 1:** The Architecture & The Bottleneck
-* **Week 2:** Building the DMA Pipeline in Vivado
-* **Week 3:** DSP Math & Hardware Gain
-* **Week 4:** Bare-Metal Memory Cache Management
-* **Week 5:** EV Physics & The Safety State Machine
-* **Week 6:** The Final Oscilloscope Visualization & Code Drop!
+* **Week 2:** [Coming Soon]
+* **Week 3:** [Coming Soon]
+* **Week 4:** [Coming Soon]
+* **Week 5:** [Coming Soon]
+* **Week 6:** [Coming Soon]
 
 *Note: The complete `main.c` source code and full PDF Project Report will be uploaded to this repository in Week 6!*
