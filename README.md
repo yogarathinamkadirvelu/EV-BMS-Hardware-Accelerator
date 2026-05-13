@@ -14,11 +14,24 @@ Traditional microcontrollers filter this noise using software (DSP), which consu
 ![CPU Bottleneck Diagram](Image2.png) 
 *(Above: The Software CPU bottleneck problem we are solving)*
 
+## 🛠️ Hardware Architecture (Vivado)
+To filter extreme inverter noise without taxing the CPU, we built a custom AXI data highway inside the Zynq-7000 SoC.
+
+1. **Master Controller:** Zynq Processing System (PS) generating a 100MHz fabric clock. We enabled the High-Performance (HP) AXI slave ports to allow the hardware direct, cache-bypassing access to the DDR RAM.
+2. **AXI DMA Engine:** Configured in Simple Transfer mode to autonomously stream raw voltage data from memory (MM2S) to the hardware and capture the clean results (S2MM).
+3. **FIR Filter Accelerator:** A 21-tap FIR Compiler IP maps the heavy convolution math directly onto the FPGA's DSP48E slices.
+
+![Vivado Block Design](image4.png) 
+*(Above: Our complete Hardware-Software Co-Design Block Design in Vivado)*
+
+![DMA Pipeline](image5.png) 
+*(Above: The AXI DMA Data Flow bypassing the ARM CPU)*
+
 ## 📅 The 6-Week Build Public Series
 We are documenting the complete build process of this system on LinkedIn! 
 
-* **Week 1:** The Architecture & The Bottleneck
-* **Week 2:** [Coming Soon]
+* **Week 1:** The Architecture & The Bottleneck 
+* **Week 2:** Hardware Architecture & The AXI DMA Pipeline 
 * **Week 3:** [Coming Soon]
 * **Week 4:** [Coming Soon]
 * **Week 5:** [Coming Soon]
