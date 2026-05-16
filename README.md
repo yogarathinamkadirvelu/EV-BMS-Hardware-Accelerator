@@ -30,8 +30,6 @@ Hardware logic is incredibly fast, but it requires careful mathematical handling
 
 ![Software Pipeline](Software_Pipeline.png)
 
-## 📅 The 6-Week Build Public Series
-We are documenting the complete build process of this system on LinkedIn! 
 
 * **Week 1:** The Architecture & The Bottleneck 
 * **Week 2:** Hardware Architecture & The AXI DMA Pipeline 
