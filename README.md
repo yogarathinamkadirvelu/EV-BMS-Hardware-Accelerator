@@ -12,29 +12,30 @@ Traditional microcontrollers filter this noise using software (DSP), which consu
 **Our Solution:** We built a Hardware-Software Co-Design architecture. We offloaded the computationally expensive DSP filtering to the FPGA fabric using an AXI DMA pipeline. This freed up the ARM Cortex-A9 processor to execute advanced EV physics simulations, State of Charge (SoC) estimation, and safety fault detection with zero latency.
 
 ![CPU Bottleneck Diagram](Image2.png) 
-*(Above: The Software CPU bottleneck problem we are solving)*
 
 ## 🛠️ Hardware Architecture (Vivado)
 To filter extreme inverter noise without taxing the CPU, we built a custom AXI data highway inside the Zynq-7000 SoC.
 
-1. **Master Controller:** Zynq Processing System (PS) generating a 100MHz fabric clock. We enabled the High-Performance (HP) AXI slave ports to allow the hardware direct, cache-bypassing access to the DDR RAM.
+1. **Master Controller:** Zynq Processing System (PS) generating a 100MHz fabric clock. 
 2. **AXI DMA Engine:** Configured in Simple Transfer mode to autonomously stream raw voltage data from memory (MM2S) to the hardware and capture the clean results (S2MM).
 3. **FIR Filter Accelerator:** A 21-tap FIR Compiler IP maps the heavy convolution math directly onto the FPGA's DSP48E slices.
 
-![Vivado Block Design](image4.png) 
-*(Above: Our complete Hardware-Software Co-Design Block Design in Vivado)*
+![Vivado Block Design](Vivado_Block_Design.png) 
+![DMA Pipeline](DMA_Pipeline.png) 
 
-![DMA Pipeline](image5.png) 
-*(Above: The AXI DMA Data Flow bypassing the ARM CPU)*
+## 🧮 Software Post-Processing (Vitis)
+Hardware logic is incredibly fast, but it requires careful mathematical handling when crossing back into the ARM CPU domain. We built a C-based DSP pipeline to handle two critical hardware phenomena:
+* **DC Gain Compensation:** The hardware FIR filter uses integer math, naturally amplifying our voltage by a factor of exactly 148. We mathematically remove this gain in software.
+* **Transient Flush:** A 21-tap filter takes 21 clock cycles to flush out its initial zero-state. If fed directly to the safety logic, this startup "garbage" data would trigger a false Under-Voltage shutdown. Our software silently drops the first 21 samples on boot.
+
+![Software Pipeline](Software_Pipeline.png)
 
 ## 📅 The 6-Week Build Public Series
 We are documenting the complete build process of this system on LinkedIn! 
 
 * **Week 1:** The Architecture & The Bottleneck 
 * **Week 2:** Hardware Architecture & The AXI DMA Pipeline 
-* **Week 3:** [Coming Soon]
+* **Week 3:** DSP Math, Gain, & Software Pipelines 
 * **Week 4:** [Coming Soon]
 * **Week 5:** [Coming Soon]
 * **Week 6:** [Coming Soon]
-
-*Note: The complete `main.c` source code and full PDF Project Report will be uploaded to this repository in Week 6!*
