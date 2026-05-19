@@ -12,6 +12,7 @@ Traditional microcontrollers filter this noise using software (DSP), which consu
 **Our Solution:** We built a Hardware-Software Co-Design architecture. We offloaded the computationally expensive DSP filtering to the FPGA fabric using an AXI DMA pipeline. This freed up the ARM Cortex-A9 processor to execute advanced EV physics simulations, State of Charge (SoC) estimation, and safety fault detection with zero latency.
 
 ![CPU Bottleneck Diagram](Image2.png) 
+*(Above: The Software CPU bottleneck problem we are solving)*
 
 ## 🛠️ Hardware Architecture (Vivado)
 To filter extreme inverter noise without taxing the CPU, we built a custom AXI data highway inside the Zynq-7000 SoC.
@@ -37,12 +38,11 @@ With a clean, latency-free telemetry stream secured by the FPGA, the ARM Cortex-
 ![Application Flowchart](App_Flowchart.png)
 ![Safety Table](Safety_Table.png)
 
-## 📅 The 6-Week Build Public Series
-We are documenting the complete build process of this system on LinkedIn! 
-
-* **Week 1:** The Architecture & The Bottleneck 
-* **Week 2:** Hardware Architecture & The AXI DMA Pipeline 
-* **Week 3:** DSP Math, Gain, & Software Pipelines 
-* **Week 4:** Bare-Metal Memory Cache Management 
-* **Week 5:** EV Physics & The Safety State Machine 
-* **Week 6:** [Coming Soon]
+## 📅 The Build Public Series
+We are documenting the complete architectural build process of this system on LinkedIn.
+* **Update 1:** The Architecture & The Bottleneck 
+* **Update 2:** Hardware Architecture & The AXI DMA Pipeline 
+* **Update 3:** DSP Math, Gain, & Software Pipelines 
+* **Update 4:** Bare-Metal Memory Cache Management 
+* **Update 5:** EV Physics & The Safety State Machine 
+* **Final Code Release & System Visualization:** [Pending]
