@@ -12,7 +12,6 @@ Traditional microcontrollers filter this noise using software (DSP), which consu
 **Our Solution:** We built a Hardware-Software Co-Design architecture. We offloaded the computationally expensive DSP filtering to the FPGA fabric using an AXI DMA pipeline. This freed up the ARM Cortex-A9 processor to execute advanced EV physics simulations, State of Charge (SoC) estimation, and safety fault detection with zero latency.
 
 ![CPU Bottleneck Diagram](Image2.png) 
-*(Above: The Software CPU bottleneck problem we are solving)*
 
 ## 🛠️ Hardware Architecture (Vivado)
 To filter extreme inverter noise without taxing the CPU, we built a custom AXI data highway inside the Zynq-7000 SoC.
@@ -21,7 +20,6 @@ To filter extreme inverter noise without taxing the CPU, we built a custom AXI d
 3. **FIR Filter Accelerator:** A 21-tap FIR Compiler IP maps the heavy convolution math directly onto the FPGA's DSP48E slices.
 
 ![Vivado Block Design](Vivado_Block_Design.png) 
-![DMA Pipeline](DMA_Pipeline.png) 
 
 ## 🧠 Bare-Metal Memory & Cache Coherency
 In a Hardware-Software Co-Design system, the CPU and the DMA share the same physical DDR memory but have different views of it due to the CPU's L1/L2 cache layers. To prevent the data bus from fetching stale data, we enforce strict programmatic Cache Coherency.
@@ -29,20 +27,24 @@ In a Hardware-Software Co-Design system, the CPU and the DMA share the same phys
 
 ## 🛡️ EV Physics & Safety State Machine
 With a clean, latency-free telemetry stream secured by the FPGA, the ARM Cortex-A9 processor is dedicated entirely to application-layer safety logic.
-👉 **[View BMS State Machine Source Code](./code/bms_state_machine.c)**
+👉 **[View BMS State Machine Source Code](./code/main.c)**
 
-* **Dynamic Physics Simulation:** Our C-code models cell discharge rates, accelerator-induced voltage sags (250mV drops), and injects 300mV peak-to-peak inverter EMI.
-* **Fault Detection Engine:** A state machine evaluates the hardware-cleaned data against strict Over-Voltage (4250mV) and Under-Voltage (2900mV) thresholds. 
-* **The Result:** The system maintains **zero false-positive safety trips** despite aggressive simulated noise.
+## 📊 System Validation & Live Experimental Telemetry
+To validate the system under real-world conditions, we programmatically injected aggressive 300mV peak-to-peak random noise spikes directly over our baseline voltage data to simulate severe traction inverter interference. 
 
-![Application Flowchart](App_Flowchart.png)
-![Safety Table](Safety_Table.png)
+The live output data stream was channeled via UART to the Vitis Serial Terminal and a secondary Arduino interface. Our experimental results confirmed:
+* **0% CPU Load for DSP:** The hardware accelerator handled 100% of the mathematical convolution filtering in parallel fabric.
+* **Deterministic Fault Detection:** The application layer maintained a flawless safety state, yielding **zero false-positive safety trips**.
 
-## 📅 The Build Public Series
-We are documenting the complete architectural build process of this system on LinkedIn.
-* **Update 1:** The Architecture & The Bottleneck 
-* **Update 2:** Hardware Architecture & The AXI DMA Pipeline 
-* **Update 3:** DSP Math, Gain, & Software Pipelines 
-* **Update 4:** Bare-Metal Memory Cache Management 
-* **Update 5:** EV Physics & The Safety State Machine 
-* **Final Code Release & System Visualization:** [Pending]
+![Serial Monitor Validation](Serial_Monitor.png)
+*(Above: Real-time UART data capture demonstrating full noise mitigation)*
+
+📁 *Note: The raw experimental demo video clip, master C-code, and the comprehensive PDF Engineering Project Report are available in this repository for full open-source review.*
+
+## 📅 Completed Build Series Timeline
+* **Phase 1:** The Architecture & The Bottleneck 
+* **Phase 2:** Hardware Architecture & The AXI DMA Pipeline 
+* **Phase 3:** DSP Math, Gain, & Software Pipelines 
+* **Phase 4:** Bare-Metal Memory Cache Management 
+* **Phase 5:** EV Physics & The Safety State Machine 
+* **Phase 6:** System Validation & Open Source Code Drop
